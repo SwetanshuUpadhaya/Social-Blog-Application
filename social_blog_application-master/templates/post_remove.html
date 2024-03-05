@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+ {% block head %}
+
+{% endblock %}
+
+{% block title %}
+Message
+{% endblock %}
+
+{% block content %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{message.tags}}" role="alert">
+    {{message}}
+</div>
+    {% endfor %}
+    {% endif %}
+   <p>Click to redirect to: <a href="{% url 'index' %}" >Home page</a></p>
+</i></strong></p>
+<footer>
+  <div class="footer-content">
+    <p>© Swetanshu Upadhaya 2024. All Rights Reserved.</p>
+  </div>
+</footer>
+{% endblock %}

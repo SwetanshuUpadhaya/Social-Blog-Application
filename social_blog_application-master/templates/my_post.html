@@ -1,0 +1,190 @@
+{% extends "base.html" %} {% load static %} {% block head %}
+<style>
+  .btn {
+    background-color: grey;
+    border: none;
+    color: white;
+    padding: 12px 16px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  /* Darker background on mouse-over */
+  .btn:hover {
+    background-color: red;
+  }
+
+  .cont {
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+
+  .footer-content {
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    color: white;
+  }
+
+  .navigation {
+    list-style-type: none;
+    margin: 0;
+    padding: 20px;
+    background-color: #333;
+    overflow: hidden;
+  }
+
+  .navigation li {
+    float: left;
+  }
+
+  .navigation li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+
+  /* Sidebar menu styles */
+  .sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 90px;
+  }
+
+  .sidebar a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+  }
+
+  .sidebar a:hover {
+    color: #f1f1f1;
+  }
+
+  .sidebar .close-btn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+
+  /* Open button style */
+  .open-btn {
+    font-size: 30px;
+    cursor: pointer;
+    color: white;
+    padding: 10px;
+    position: fixed;
+    top: 20px;
+    left: 10px;
+    z-index: 2;
+    display: none;
+  }
+
+  @media screen and (max-width: 768px) {
+    .navigation {
+      display: none;
+    }
+
+    .open-btn {
+      display: block;
+    }
+  }
+
+  @media screen and (max-width: 576px) {
+    .open-btn {
+      display: block;
+    }
+  }
+</style>
+{% endblock %} {% block title %} my_post {% endblock %} {% block content %}
+<div id="sidebar" class="sidebar">
+  <a href="javascript:void(0)" class="close-btn" onclick="closeNav()"
+    >&times;</a
+  >
+  <a href="/">Home</a>
+  <a href="{% url 'contact' %}">Contact Us</a>
+  <a href="{% url 'profile' %}">Profile</a>
+  <a href="{% url 'logout' %}">Logout</a>
+</div>
+
+{% if user.is_authenticated %}
+<ul class="navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="{% url 'contact' %}">Contact Us</a></li>
+  <li><a href="{% url 'profile' %}">Profile</a></li>
+  <li><a href="{% url 'logout' %}">Logout</a></li>
+</ul>
+{% else %}
+<ul class="navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="{% url 'contact' %}">Contact Us</a></li>
+  <li><a href="{% url 'login' %}">Login</a></li>
+  <li><a href="{% url 'register' %}">Register</a></li>
+</ul>
+{% endif %}
+
+<div class="cont">
+  <a class="content-section"></a>
+  <h2 class="blog-post-title">{{ m_post.title }}</h2>
+  <div
+    class="fb-like"
+    data-href="http://127.0.0.1:8000/my_post/{{m_post.id}}"
+    data-width=""
+    data-layout="standard"
+    data-action="like"
+    data-size="large"
+    data-share="true"
+  ></div>
+  <p class="blog-post-title mb-0">Author: {{ m_post.author.get_full_name }}</p>
+  <p class="blog-post-meta">{{ m_post.pubdate }}</p>
+  <hr />
+  {% if user.is_authenticated %}
+  <p>
+    <i style="color: red">Delete Post</i
+    ><a href="{% url 'post_remove' m_post.id %}"
+      ><button class="btn"><i class="fa fa-trash"></i></button
+    ></a>
+  </p>
+  {% endif %}
+  <p>{{ m_post.desc }}</p>
+  <div
+    class="fb-comments"
+    data-href="http://127.0.0.1:8000/my_post/{{m_post.id}}"
+    data-numposts="5"
+    data-width=""
+  ></div>
+</div>
+
+<footer>
+  <div class="footer-content">
+    <p>© Swetanshu Upadhaya 2024. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<!-- Open button for sidebar -->
+<span class="open-btn" onclick="openNav()">&#9776;</span>
+
+<script>
+  function openNav() {
+    document.getElementById("sidebar").style.width = "200px";
+  }
+
+  function closeNav() {
+    document.getElementById("sidebar").style.width = "0";
+  }
+</script>
+{% endblock %}

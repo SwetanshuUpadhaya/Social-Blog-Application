@@ -1,0 +1,171 @@
+{% extends "base.html" %} {% load static %} {% load crispy_forms_tags %} {%
+block head %}
+<style>
+  .cont {
+    margin-left: 30%;
+  }
+  .footer-content {
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    color: white;
+  }
+  .navigation {
+    list-style-type: none;
+    margin: 0;
+    padding: 20px;
+    background-color: #333;
+    overflow: hidden;
+  }
+
+  .navigation li {
+    float: left;
+  }
+
+  .navigation li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  /* Sidebar menu styles */
+  .sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 90px;
+  }
+
+  .sidebar a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+  }
+
+  .sidebar a:hover {
+    color: #f1f1f1;
+  }
+
+  .sidebar .close-btn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+
+  /* Open button style */
+  .open-btn {
+    font-size: 30px;
+    cursor: pointer;
+    color: white;
+    padding: 10px;
+    position: fixed;
+    top: 20px;
+    left: 10px;
+    z-index: 2;
+    display: none;
+  }
+  @media screen and (max-width: 768px) {
+    .navigation {
+      display: none;
+    }
+    .open-btn {
+      display: block;
+    }
+  }
+
+  @media screen and (max-width: 576px) {
+    .open-btn {
+      display: block;
+    }
+  }
+</style>
+{% endblock %} {% block title %} Post {% endblock %} {% block content %}
+
+<div id="sidebar" class="sidebar">
+  <a href="javascript:void(0)" class="close-btn" onclick="closeNav()"
+    >&times;</a
+  >
+  <a href="/">Home</a>
+  <a href="{% url 'contact' %}">Contact Us</a>
+  <a href="{% url 'profile' %}">Profile</a>
+  <a href="{% url 'logout' %}">Logout</a>
+</div>
+
+{% if user.is_authenticated %}
+<ul class="navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="{% url 'contact' %}">Contact Us</a></li>
+  <li><a href="{% url 'profile' %}">Profile</a></li>
+  <li><a href="{% url 'logout' %}">Logout</a></li>
+</ul>
+{% else %}
+<ul class="navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="{% url 'contact' %}">Contact Us</a></li>
+  <li><a href="{% url 'login' %}">Login</a></li>
+  <li><a href="{% url 'register' %}">Register</a></li>
+</ul>
+{% endif %} {% if user.is_authenticated %}
+<div class="cont">
+  <div class="row">
+    <div class="content-section">
+      <h2>Create post</h2>
+      <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form">
+          <label for="title">{{ b_form.title|as_crispy_field }}</label>
+        </div>
+        <div class="form">
+          <label for="description">{{ b_form.desc|as_crispy_field }}</label>
+        </div>
+        <div class="file-field">{{ b_form.img|as_crispy_field }}</div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">Create Blog</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% else %}
+<p>
+  <i
+    ><strong
+      ><a href="{% url 'login' %}">Login</a> first to create a blog!</strong
+    ></i
+  >
+</p>
+{% endif %}
+
+<footer>
+  <div class="footer-content">
+    <p>© Swetanshu Upadhaya 2024. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<!-- Open button for sidebar -->
+<span class="open-btn" onclick="openNav()">&#9776;</span>
+
+<script>
+  function openNav() {
+    document.getElementById("sidebar").style.width = "200px";
+  }
+
+  function closeNav() {
+    document.getElementById("sidebar").style.width = "0";
+  }
+</script>
+
+{% endblock %}

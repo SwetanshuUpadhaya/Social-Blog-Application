@@ -1,0 +1,236 @@
+{% extends "base.html" %} {% load static %} {% block head %}
+<link rel="stylesheet" href="{% static 'style1.css' %}" />
+<style>
+  .navigation {
+    list-style-type: none;
+    margin: 0;
+    padding: 20px;
+    background-color: #333;
+    overflow: hidden;
+  }
+
+  .navigation li {
+    float: left;
+  }
+
+  .navigation li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  .contact {
+    margin-top: 15px;
+    padding: 4%;
+    background-color: #e2e2e2;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .contact-info {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .contact-info img {
+    width: 150px;
+    margin-bottom: 15px;
+  }
+
+  .contact-form label {
+    font-weight: bold;
+  }
+
+  .contact-form button {
+    background-color: #25274d;
+    color: #fff;
+    font-weight: bold;
+    width: 100px;
+    border-radius: 5px;
+  }
+
+  .contact-form button:hover {
+    background-color: #1a1c3e;
+  }
+
+  .footer-content {
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    color: white;
+  }
+
+  /* Sidebar menu styles */
+  .sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 90px;
+  }
+
+  .sidebar a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+  }
+
+  .sidebar a:hover {
+    color: #f1f1f1;
+  }
+
+  .sidebar .close-btn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+
+  /* Open button style */
+  .open-btn {
+    font-size: 30px;
+    cursor: pointer;
+    color: white;
+    padding: 10px;
+    position: fixed;
+    top: 20px;
+    left: 10px;
+    z-index: 2;
+    display: none;
+  }
+
+  @media screen and (max-width: 768px) {
+    .navigation {
+      display: none;
+    }
+    .open-btn {
+      display: block;
+    }
+  }
+
+  @media screen and (max-width: 576px) {
+    .open-btn {
+      display: block;
+    }
+  }
+</style>
+{% endblock %} {% block title%} Contact Us {% endblock %} {% block content %}
+<div id="sidebar" class="sidebar">
+  <a href="javascript:void(0)" class="close-btn" onclick="closeNav()"
+    >&times;</a
+  >
+  <a href="/">Home</a>
+  <a href="{% url 'contact' %}">Contact Us</a>
+  <a href="{% url 'profile' %}">Profile</a>
+  <a href="{% url 'logout' %}">Logout</a>
+</div>
+
+{% if user.is_authenticated %}
+<ul class="navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="{% url 'contact' %}">Contact Us</a></li>
+  <li><a href="{% url 'profile' %}">Profile</a></li>
+  <li><a href="{% url 'logout' %}">Logout</a></li>
+</ul>
+{% else %}
+<ul class="navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="{% url 'contact' %}">Contact Us</a></li>
+  <li><a href="{% url 'login' %}">Login</a></li>
+  <li><a href="{% url 'register' %}">Register</a></li>
+</ul>
+{% endif %} {% if messages %} {% for message in messages %}
+<div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+{% endfor %} {% endif %}
+
+<form id="contact-form" method="post">
+  {% csrf_token %}
+  <div class="container contact">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="contact-info">
+          <img
+            src="https://image.ibb.co/kUASdV/contact-image.png"
+            alt="image"
+          />
+          <h2>Contact Us</h2>
+          <p>We would love to hear from you!</p>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="contact-form">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              placeholder="Enter your name"
+              name="name"
+            />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              placeholder="Enter your email"
+              name="email"
+            />
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input
+              type="tel"
+              class="form-control"
+              id="phone"
+              placeholder="Enter your phone number"
+              name="phone"
+            />
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea
+              class="form-control"
+              id="message"
+              rows="5"
+              placeholder="Enter your message"
+              name="message"
+            ></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<footer>
+  <div class="footer-content">
+    <p>© Swetanshu Upadhaya 2024. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<!-- Open button for sidebar -->
+<span class="open-btn" onclick="openNav()">&#9776;</span>
+
+<script>
+  function openNav() {
+    document.getElementById("sidebar").style.width = "200px";
+  }
+
+  function closeNav() {
+    document.getElementById("sidebar").style.width = "0";
+  }
+</script>
+{% endblock %}
